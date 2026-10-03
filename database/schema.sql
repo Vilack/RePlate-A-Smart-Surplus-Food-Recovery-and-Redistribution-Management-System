@@ -558,3 +558,26 @@ ON public.notifications(is_read);
 -- ============================================================
 -- END OF RePlate SCHEMA
 -- ============================================================
+
+-- ============================================================
+-- POLICY MAKING
+CREATE POLICY "Anyone can view food categories"
+ON public.food_categories
+FOR SELECT
+TO anon, authenticated
+USING (true);
+
+CREATE POLICY "Users can view their own profile"
+ON public.profiles
+FOR SELECT
+TO authenticated
+USING (auth.uid() = id);
+
+
+CREATE POLICY "Users can update their own profile"
+ON public.profiles
+FOR UPDATE
+TO authenticated
+USING (auth.uid() = id)
+WITH CHECK (auth.uid() = id);
+-- =============================================================
